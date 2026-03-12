@@ -102,6 +102,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                   </td>
                   <td className="px-6 py-4">
                     <span className="font-extrabold text-slate-800 uppercase block">{s.nama}</span>
+                    <p className="text-slate-400 italic">Kelas: {s.kelas}</p>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-slate-600 space-y-0.5 text-xs">
@@ -214,10 +215,15 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                     <input type="text" value={editingSiswa.tgl_lahir} onChange={(e) => setEditingSiswa({...editingSiswa, tgl_lahir: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary outline-none" />
                   </div>
                 </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Nama Ayah</label>
-                  <input type="text" value={editingSiswa.nama_ayah} onChange={(e) => setEditingSiswa({...editingSiswa, nama_ayah: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary outline-none font-medium" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Nama Ayah</label>
+                    <input type="text" value={editingSiswa.nama_ayah} onChange={(e) => setEditingSiswa({...editingSiswa, nama_ayah: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary outline-none font-medium" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Kelas</label>
+                    <input type="text" value={editingSiswa.kelas} onChange={(e) => setEditingSiswa({...editingSiswa, kelas: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary outline-none font-medium" />
+                  </div>
                 </div>
 
                 <div className="flex flex-col-reverse md:flex-row gap-3 pt-4">

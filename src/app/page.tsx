@@ -71,8 +71,11 @@ export default function HalamanCekKelulusan() {
   const downloadPDF = (data: any) => {
     const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
     const doc = new jsPDF();
-
     const img = new Image();
+    const kepsek = data.pengaturan?.nama_kepsek || "Nama Default";
+    const nip = data.pengaturan?.nip_kepsek || "NIP Default";
+    const nomorSurat = data.pengaturan?.nomor_surat || "Nomor Default";
+    const tglSurat = data.pengaturan?.tgl_surat || "Tanggal Default";
     img.src = '/kop.png'; 
     
     img.onload = () => {
@@ -87,7 +90,7 @@ export default function HalamanCekKelulusan() {
       // SISANYA TIDAK BOLD
       doc.setFont("helvetica", "normal");
       doc.setFontSize(11);
-      doc.text("Nomor : 056/KPG.01.06/SMAN1MARGAASIH", 105, 67, { align: "center" });
+      doc.text(`Nomor : ${nomorSurat}`, 105, 67, { align: "center" });
       doc.line(65, 69, 145, 69);
 
       // 3. DATA KEPALA SEKOLAH (NORMAL)
@@ -97,9 +100,9 @@ export default function HalamanCekKelulusan() {
         startY: 83,
         margin: { left: 25 },
         body: [
-          ["Nama", ": CUCU IMAN, S. Pd, M. M. Pd"],
-          ["NIP", ": 197306072000121002"],
-          ["Pangkat/Gol", ": IV/b"],
+          ["Nama", `: ${kepsek.toUpperCase()}`],
+          ["NIP", `: ${nip}`],
+          ["Pangkat/Gol", `: ${data.pengaturan?.pangkat || "Pangkat Default"}`],
           ["Jabatan", ": Kepala SMA Negeri 1 Margaasih"],
         ],
         theme: "plain",
@@ -155,22 +158,22 @@ export default function HalamanCekKelulusan() {
 
       // 6. TANDA TANGAN
       const ttdY = boxY + 50;
-      doc.text("Bandung,  Juni 2026", 140, ttdY);
+      doc.text(`${tglSurat}`, 140, ttdY);
       doc.text("Kepala SMAN 1 MARGAASIH", 140, ttdY + 7);
       
-      doc.text("CUCU IMAN, S. Pd, M. M. Pd", 140, ttdY + 30);
+      doc.text(`${kepsek.toUpperCase()}`, 140, ttdY + 30);
       doc.line(140, ttdY + 31, 195, ttdY + 31); // Garis bawah nama kepsek
-      doc.text("NIP. 197306072000121002", 140, ttdY + 36);
+      doc.text(`NIP. ${nip}`, 140, ttdY + 36);
 
       doc.save(`SKL_SMAN1MAG_2026_${data.nama}.pdf`);
     };
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-slate-300 flex items-center justify-center p-6">
       <div className="bg-white w-full max-w-md rounded-[3rem] p-8 shadow-2xl border border-slate-100">
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">🎓</div>
+          <div className="text-5xl mb-3 flex justify-center"><img src={"logo.png"} className="w-30 h-35"/></div>
           <h1 className="text-2xl font-black text-slate-800 uppercase">Cek Kelulusan</h1>
           <p className="text-sm text-slate-400 font-medium">Gunakan NISN dan Tanggal Lahirmu</p>
         </div>
@@ -238,6 +241,7 @@ export default function HalamanCekKelulusan() {
                 <div className="border-b pb-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Nama Lengkap</p>
                   <p className="text-lg font-black text-slate-800 uppercase">{hasilSiswa.nama}</p>
+                  <p className="text-lg font-black text-slate-800 uppercase">{hasilSiswa.kelas}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm font-bold">
                   <div><p className="text-[10px] text-slate-400">NISN</p>{hasilSiswa.nisn}</div>

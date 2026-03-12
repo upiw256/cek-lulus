@@ -8,6 +8,7 @@ import Sidebar from "@/components/admin/Sidebar";
 import StatCard from "@/components/admin/StatCard";
 import UploadBox from "@/components/admin/UploadBox";
 import TableSiswa from "@/components/admin/TableSiswa";
+import SettingPage from "@/components/admin/SettingPage";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -191,6 +192,10 @@ export default function AdminDashboard() {
             <TableSiswa 
               data={allSiswa} 
               onRefresh={fetchSiswa} 
+            />
+          )}
+          {activeTab === "settings" && (
+            <SettingPage 
             />
           )}
 

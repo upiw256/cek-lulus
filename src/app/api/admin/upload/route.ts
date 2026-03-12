@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import Siswa from "@/models/model";
+import {Siswa} from "@/models/model";
 import ExcelJS from "exceljs";
 
 export async function POST(req: NextRequest) {
@@ -43,9 +43,10 @@ export async function POST(req: NextRequest) {
         const tgl_lahir = tgl_lahir_convert;
         const nama_ayah = row.getCell(7).text?.trim(); // Kolom G
         const statusRaw = row.getCell(8).text?.trim().toLowerCase();
+        const kelas = row.getCell(9).text?.trim(); // Kolom I (Kelas)
 
         // LOG untuk intip data di terminal/console
-        console.log(`Baris ${rowNumber}:`, { nisn, nama, nama_ayah, tgl_lahir });
+        console.log(`Baris ${rowNumber}:`, { nisn, nama, nama_ayah, tgl_lahir, kelas, statusRaw });
 
         // Validasi: pastikan data penting tidak kosong sebelum di-push
         if (nisn && nama && nama_ayah) { 
@@ -57,6 +58,7 @@ export async function POST(req: NextRequest) {
             tgl_lahir,
             nama_ayah,
             status_lulus: statusRaw === "lulus",
+            kelas,
           });
         } else {
           console.warn(`⚠️ Baris ${rowNumber} dilewati karena data tidak lengkap (Cek Nama Ayah!)`);

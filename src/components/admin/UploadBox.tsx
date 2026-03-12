@@ -14,6 +14,7 @@ const downloadTemplate = async () => {
     { header: "Tanggal Lahir", key: "tgl_lahir", width: 15 },
     { header: "Nama Ayah", key: "nama_ayah", width: 25 }, // Tambahan
     { header: "Status", key: "status", width: 15 },
+    { header: "Kelas", key: "kelas", width: 10 }, // Tambahan
   ];
 
   // 2. Tambahkan satu baris contoh agar admin tidak bingung
@@ -26,6 +27,7 @@ const downloadTemplate = async () => {
     tgl_lahir: "12/05/2007",
     nama_ayah: "SUHERMAN",
     status: "Lulus",
+    kelas: "12 IPA 1",
   });
 
   // 3. Beri sedikit warna pada header agar cantik
