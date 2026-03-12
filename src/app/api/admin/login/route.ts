@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   const { password } = await req.json();
 
   // Kamu bisa ganti password-nya di sini
-  if (password === "admin123") {
+  if (password === process.env.ADMIN_PASSWORD) {
     const response = NextResponse.json({ message: "Login Berhasil" });
     
     // Memberikan cookie 'admin_token' yang berlaku selama 24 jam

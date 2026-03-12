@@ -103,7 +103,7 @@ export default function HalamanCekKelulusan() {
           ["Nama", `: ${kepsek.toUpperCase()}`],
           ["NIP", `: ${nip}`],
           ["Pangkat/Gol", `: ${data.pengaturan?.pangkat || "Pangkat Default"}`],
-          ["Jabatan", ": Kepala SMA Negeri 1 Margaasih"],
+          ["Jabatan", `: Kepala ${process.env.NEXT_PUBLIC_SCHOOL_NAME}`],
         ],
         theme: "plain",
         styles: { fontSize: 11, cellPadding: 1, fontStyle: "normal" }, // Normal
@@ -159,7 +159,7 @@ export default function HalamanCekKelulusan() {
       // 6. TANDA TANGAN
       const ttdY = boxY + 50;
       doc.text(`${tglSurat}`, 140, ttdY);
-      doc.text("Kepala SMAN 1 MARGAASIH", 140, ttdY + 7);
+      doc.text(`Kepala ${process.env.NEXT_PUBLIC_SCHOOL_NAME}`, 140, ttdY + 7);
       
       doc.text(`${kepsek.toUpperCase()}`, 140, ttdY + 30);
       doc.line(140, ttdY + 31, 195, ttdY + 31); // Garis bawah nama kepsek
