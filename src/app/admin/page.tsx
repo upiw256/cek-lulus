@@ -45,7 +45,6 @@ export default function AdminDashboard() {
   const menus = [
     { id: "dashboard", name: "Dashboard", icon: "📊" },
     { id: "upload", name: "Import Excel", icon: "📁" },
-    { id: "tte", name: "Tanda Tangan (TTE)", icon: "✍️" },
     { id: "siswa", name: "Data Siswa", icon: "👥" },
     { id: "settings", name: "Pengaturan", icon: "⚙️" },
   ];

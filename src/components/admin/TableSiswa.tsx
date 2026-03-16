@@ -48,10 +48,15 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
+      let dataToSave = { ...editingSiswa };
+      if (dataToSave.tgl_lahir.includes("-")) {
+        const [year, month, day] = dataToSave.tgl_lahir.split("-");
+        dataToSave.tgl_lahir = `${day}/${month}/${year}`;
+      }
       const res = await fetch(`/api/admin/siswa/${editingSiswa._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingSiswa),
+        body: JSON.stringify(dataToSave),
       });
 
       if (res.ok) {
@@ -198,8 +203,16 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex justify-center gap-2">
-                    <button
-                      onClick={() => setEditingSiswa(s)}
+                    <button 
+                      onClick={() => {
+                        let siswa = { ...s };
+                        // Jika di database formatnya DD/MM/YYYY, ubah ke YYYY-MM-DD agar muncul di input date
+                        if (siswa.tgl_lahir && siswa.tgl_lahir.includes("/")) {
+                          const [day, month, year] = siswa.tgl_lahir.split("/");
+                          siswa.tgl_lahir = `${year}-${month}-${day}`;
+                        }
+                        setEditingSiswa(siswa);
+                      }} 
                       className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg"
                     >
                       ✏️
@@ -355,59 +368,91 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
       {editingSiswa && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
           <div className="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-2xl font-black text-slate-800 mb-6 uppercase tracking-tighter">
-              Edit Data Siswa
+            <h3 className="text-2xl font-black text-slate-800 mb-6 uppercase tracking-tighter italic">
+              Edit Profil Siswa
             </h3>
+            
             <form onSubmit={handleUpdate} className="space-y-4">
+              {/* BARIS 1: NIS & NISN */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">
-                    NIS
-                  </label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">NIS</label>
                   <input
                     type="text"
                     value={editingSiswa.nis}
-                    onChange={(e) =>
-                      setEditingSiswa({ ...editingSiswa, nis: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-slate-50 border rounded-2xl"
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, nis: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">
-                    NISN
-                  </label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">NISN</label>
                   <input
                     type="text"
                     value={editingSiswa.nisn}
-                    onChange={(e) =>
-                      setEditingSiswa({ ...editingSiswa, nisn: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-slate-50 border rounded-2xl"
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, nisn: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
                   />
                 </div>
               </div>
+
+              {/* BARIS 2: NAMA LENGKAP */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">
-                  Nama Lengkap
-                </label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Nama Lengkap</label>
                 <input
                   type="text"
                   value={editingSiswa.nama}
-                  onChange={(e) =>
-                    setEditingSiswa({
-                      ...editingSiswa,
-                      nama: e.target.value.toUpperCase(),
-                    })
-                  }
-                  className="w-full px-4 py-3 bg-slate-50 border rounded-2xl font-bold"
+                  onChange={(e) => setEditingSiswa({ ...editingSiswa, nama: e.target.value.toUpperCase() })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-black text-blue-600"
                 />
               </div>
-              {/* Field Status Lulus */}
+
+              {/* BARIS 3: TEMPAT & TANGGAL LAHIR */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Tempat Lahir</label>
+                  <input
+                    type="text"
+                    value={editingSiswa.tempat_lahir}
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, tempat_lahir: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Tgl Lahir</label>
+                  <input
+                    type="date"
+                    value={editingSiswa.tgl_lahir}
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, tgl_lahir: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* BARIS 4: NAMA AYAH & KELAS */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Nama Ayah</label>
+                  <input
+                    type="text"
+                    value={editingSiswa.nama_ayah}
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, nama_ayah: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Kelas</label>
+                  <input
+                    type="text"
+                    value={editingSiswa.kelas}
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, kelas: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* BARIS 5: STATUS KELULUSAN */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">
-                  Status Kelulusan
-                </label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Status Kelulusan</label>
                 <select
                   value={editingSiswa.status_lulus ? "true" : "false"}
                   onChange={(e) =>
@@ -416,26 +461,32 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                       status_lulus: e.target.value === "true",
                     })
                   }
-                  className="w-full px-4 py-3 bg-slate-50 border rounded-2xl outline-none"
+                  className={`w-full px-4 py-3 border rounded-2xl outline-none font-black transition-all ${
+                    editingSiswa.status_lulus 
+                      ? "bg-green-50 border-green-200 text-green-600" 
+                      : "bg-red-50 border-red-200 text-red-600"
+                  }`}
                 >
                   <option value="true">LULUS</option>
                   <option value="false">TUNDA</option>
                 </select>
               </div>
-              <div className="flex gap-3 pt-4">
+
+              {/* TOMBOL AKSI */}
+              <div className="flex gap-3 pt-6">
                 <button
                   type="button"
                   onClick={() => setEditingSiswa(null)}
-                  className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-bold"
+                  className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-bold hover:bg-slate-200 transition-all"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-4 bg-green-600 text-white rounded-2xl font-bold"
+                  className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black shadow-lg shadow-slate-200 hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-50"
                 >
-                  Simpan Perubahan
+                  {isSubmitting ? "Menyimpan..." : "Simpan Perubahan 🚀"}
                 </button>
               </div>
             </form>

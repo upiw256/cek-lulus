@@ -68,52 +68,61 @@ export default function HalamanCekKelulusan() {
     }
   };
 
-  const downloadPDF = (data: any) => {
+    const downloadPDF = (data: any) => {
     const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
     const doc = new jsPDF();
-    const img = new Image();
-    const kepsek = data.pengaturan?.nama_kepsek || "Nama Default";
-    const nip = data.pengaturan?.nip_kepsek || "NIP Default";
-    const nomorSurat = data.pengaturan?.nomor_surat || "Nomor Default";
-    const tglSurat = data.pengaturan?.tgl_surat || "Tanggal Default";
-    img.src = '/kop.png'; 
     
-    img.onload = () => {
-      // 1. KOP SURAT
-      doc.addImage(img, 'PNG', 10, 10, 190, 40); 
+    // Ambil data dari hasil cek (yang sudah include data pengaturan)
+    const set = data.pengaturan;
+    const kepsek = set?.nama_kepsek || "Nama Kepala Sekolah";
+    const nip = set?.nip_kepsek || "NIP. -";
+    const pangkat = set?.pangkat || "-";
+    const nomorSurat = set?.nomor_surat || "000/xxx/2026";
+    const tglSurat = set?.tgl_surat || "Juni 2026";
 
-      // 2. JUDUL SURAT (BOLD)
+    // Siapkan Gambar-gambar
+    const imgKop = new Image();
+    const imgTtd = new Image();
+    const imgCap = new Image();
+
+    imgKop.src = '/kop.png'; 
+    // Kita tambah timestamp agar selalu ambil yang terbaru dari public/tte
+    imgTtd.src = `/tte/signature.png?t=${Date.now()}`;
+    imgCap.src = `/tte/stamp.png?t=${Date.now()}`;
+
+    imgKop.onload = () => {
+      // 1. KOP SURAT
+      doc.addImage(imgKop, 'PNG', 10, 10, 190, 40); 
+
+      // 2. JUDUL SURAT
       doc.setFont("helvetica", "bold");
       doc.setFontSize(14);
       doc.text("SURAT KETERANGAN LULUS", 105, 60, { align: "center" });
       
-      // SISANYA TIDAK BOLD
       doc.setFont("helvetica", "normal");
       doc.setFontSize(11);
       doc.text(`Nomor : ${nomorSurat}`, 105, 67, { align: "center" });
       doc.line(65, 69, 145, 69);
 
-      // 3. DATA KEPALA SEKOLAH (NORMAL)
+      // 3. DATA KEPALA SEKOLAH
       doc.text("Yang bertanda tangan dibawah ini :", 20, 80);
-      
       autoTable(doc, {
         startY: 83,
         margin: { left: 25 },
         body: [
           ["Nama", `: ${kepsek.toUpperCase()}`],
           ["NIP", `: ${nip}`],
-          ["Pangkat/Gol", `: ${data.pengaturan?.pangkat || "Pangkat Default"}`],
-          ["Jabatan", `: Kepala ${process.env.NEXT_PUBLIC_SCHOOL_NAME}`],
+          ["Pangkat/Gol", `: ${pangkat}`],
+          ["Jabatan", `: Kepala SMA Negeri 1 Margaasih`],
         ],
         theme: "plain",
-        styles: { fontSize: 11, cellPadding: 1, fontStyle: "normal" }, // Normal
+        styles: { fontSize: 11, cellPadding: 1 },
         columnStyles: { 0: { cellWidth: 35 } },
       });
 
-      // 4. DATA SISWA (NORMAL)
+      // 4. DATA SISWA
       const middleY = (doc as any).lastAutoTable.finalY + 10;
       doc.text("Dengan ini menerangkan bahwa :", 20, middleY);
-
       autoTable(doc, {
         startY: middleY + 3,
         margin: { left: 25 },
@@ -125,48 +134,52 @@ export default function HalamanCekKelulusan() {
           ["NISN", `: ${data.nisn}`],
         ],
         theme: "plain",
-        styles: { fontSize: 11, cellPadding: 1, fontStyle: "normal" }, // Normal
+        styles: { fontSize: 11, cellPadding: 1 },
         columnStyles: { 0: { cellWidth: 45 } },
       });
 
-      // 5. PERNYATAAN LULUS & KOTAK "LULUS" (SESUAI GAMBAR)
+      // 5. STATUS KELULUSAN
       const statementY = (doc as any).lastAutoTable.finalY + 15;
-      const textPernyataan = "Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran 2024/2025, siswa tersebut di atas telah dinyatakan :";
-      
-      const splitPernyataan = doc.splitTextToSize(textPernyataan, 170);
-      doc.text(splitPernyataan, 20, statementY);
+      doc.text("Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran 2024/2025, siswa tersebut di atas telah dinyatakan :", 20, statementY, { maxWidth: 170 });
 
-      // MEMBUAT KOTAK LULUS SEPERTI DI GAMBAR
-      const boxWidth = 60;
-      const boxHeight = 15;
-      const boxX = 105 - (boxWidth / 2); // Center
-      const boxY = statementY + 8;
-
-      // Gambar Kotak (Rectangle)
-      doc.setLineWidth(0.8); // Garis kotak agak tebal
-      doc.rect(boxX, boxY, boxWidth, boxHeight); 
-      
-      // Tulisan LULUS di dalam kotak
-      doc.setFont("helvetica", "bold"); // Khusus kata LULUS dibuat Bold
+      const boxY = statementY + 10;
+      doc.setLineWidth(0.5);
+      doc.rect(75, boxY, 60, 15); 
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.text(`${lulus}`, 105, boxY + 10, { align: "center" });
 
-      // Kembali ke Normal
       doc.setFont("helvetica", "normal");
       doc.setFontSize(11);
       doc.text("Demikian Surat Keterangan Lulus ini dibuat agar dapat digunakan keperluan lain sesuai kebutuhan.", 20, boxY + 25);
 
-      // 6. TANDA TANGAN
-      const ttdY = boxY + 50;
-      doc.text(`${tglSurat}`, 140, ttdY);
-      doc.text(`Kepala ${process.env.NEXT_PUBLIC_SCHOOL_NAME}`, 140, ttdY + 7);
-      
-      doc.text(`${kepsek.toUpperCase()}`, 140, ttdY + 30);
-      doc.line(140, ttdY + 31, 195, ttdY + 31); // Garis bawah nama kepsek
-      doc.text(`NIP. ${nip}`, 140, ttdY + 36);
+      // 6. TANDA TANGAN & CAP (BAGIAN PALING KEREN)
+      const ttdAreaY = boxY + 45;
+      doc.text(`Bandung, ${tglSurat}`, 130, ttdAreaY);
+      doc.text(`Kepala SMA Negeri 1 Margaasih,`, 130, ttdAreaY + 7);
 
-      doc.save(`SKL_SMAN1MAG_2026_${data.nama}.pdf`);
+      // --- Masukkan Tanda Tangan ---
+      // Kita taruh TTD dulu
+      doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, 40, 20);
+
+      // --- Masukkan Cap Sekolah ---
+      // Cap ditaruh agak bergeser ke kiri ttd supaya terlihat natural menimpa ttd
+      doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, 30, 30);
+
+      // Nama Kepsek
+      doc.setFont("helvetica", "bold");
+      doc.text(`${kepsek.toUpperCase()}`, 130, ttdAreaY + 40);
+      doc.line(130, ttdAreaY + 41, 185, ttdAreaY + 41);
+      doc.setFont("helvetica", "normal");
+      doc.text(`NIP. ${nip}`, 130, ttdAreaY + 46);
+
+      // Selesai dan Download!
+      doc.save(`SKL_${data.nisn}_${data.nama.split(' ')[0]}.pdf`);
     };
+
+    // Jika gambar ttd/cap tidak ada, tetap jalankan PDF tanpa gambar tersebut
+    imgTtd.onerror = () => { console.log("TTD tidak ditemukan"); };
+    imgCap.onerror = () => { console.log("Cap tidak ditemukan"); };
   };
 
   return (
