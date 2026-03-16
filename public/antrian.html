@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabar Ya! - Antrian Penuh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(-5%); }
+            50% { transform: translateY(0); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-200 min-h-screen flex items-center justify-center p-6">
+
+    <div class="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-[3rem] p-10 shadow-2xl border border-white text-center">
+        
+        <div class="text-7xl mb-6 animate-bounce-slow">
+            🐢
+        </div>
+
+        <h1 class="text-3xl font-black text-slate-800 uppercase tracking-tighter italic mb-4">
+            Waduh, Antri Dulu Ya!
+        </h1>
+
+        <div class="space-y-4 mb-8">
+            <p class="text-slate-500 font-medium leading-relaxed">
+                Maaf banget nih, saat ini server lagi melayani <span class="text-blue-600 font-black">20 orang</span> sekaligus. 
+            </p>
+            <div class="bg-blue-50 text-blue-700 py-3 px-6 rounded-2xl text-xs font-bold uppercase tracking-widest">
+                Jangan ditutup ya, kamu akan masuk otomatis
+            </div>
+        </div>
+
+        <div class="relative pt-1">
+            <div class="flex mb-2 items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-black inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-100">
+                        Status Antrian
+                    </span>
+                </div>
+                <div class="text-right">
+                    <span id="timer-text" class="text-xs font-black text-blue-600">
+                        60s
+                    </span>
+                </div>
+            </div>
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-blue-100">
+                <div id="progress-bar" style="width:100%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div>
+            </div>
+        </div>
+
+        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-6">
+            Otomatis Refresh Dalam <span id="seconds">60</span> Detik
+        </p>
+    </div>
+
+    <script>
+        let timeLeft = 60;
+        const secondsElement = document.getElementById('seconds');
+        const timerText = document.getElementById('timer-text');
+        const progressBar = document.getElementById('progress-bar');
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            
+            // Update Teks
+            secondsElement.innerText = timeLeft;
+            timerText.innerText = timeLeft + "s";
+            
+            // Update Progress Bar
+            let width = (timeLeft / 60) * 100;
+            progressBar.style.width = width + "%";
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.reload();
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
