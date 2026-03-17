@@ -47,6 +47,7 @@ export default function AdminDashboard() {
     { id: "upload", name: "Import Excel", icon: "📁" },
     { id: "siswa", name: "Data Siswa", icon: "👥" },
     { id: "settings", name: "Pengaturan", icon: "⚙️" },
+    { id : "pdf", name: "Setting PDF", icon: "💾" },
   ];
 
   // --- FUNGSI LOGOUT ---
@@ -198,7 +199,7 @@ export default function AdminDashboard() {
           {activeTab === "settings" && <SettingPage />}
 
           {/* TAB LAINNYA (Coming Soon) */}
-          {activeTab === "tte" && (
+          {activeTab === "pdf" && (
             <div className="card text-center p-20 opacity-50 border-dashed border-2">
               <p className="text-slate-400">
                 Fitur {menus.find((m) => m.id === activeTab)?.name} sedang
