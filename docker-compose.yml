@@ -6,27 +6,37 @@ services:
     build: .
     restart: always
     volumes:
-      # PENTING: Supaya upload TTD & CAP tidak hilang!
+      # Supaya file yang diupload (TTD/CAP) tersimpan permanen di folder server
       - ./public/tte:/app/public/tte
+      # Tambahan: Supaya antrian.html di public juga bisa dibaca aplikasi jika perlu
+      - ./public/antrian.html:/app/public/antrian.html
     environment:
+      # Gunakan nama service database 'mongo_db' sebagai host
       - DATABASE_URL=mongodb://mongo_db:27017/skl_db
+      - MONGODB_URI=mongodb://mongo_db:27017/skl_db
       - NEXT_PUBLIC_SCHOOL_NAME=SMAN 1 MARGAASIH
+      - ADMIN_PASSWORD=admin123
+      - JWT_SECRET=rahasia_guru_2026_super_aman_sekali
+      - NEXT_PUBLIC_APP_URL=https://skl.sman1margaasih.sch.id
+    depends_on:
+      - mongo_db
 
   nginx_satpam:
     container_name: skl_proxy
     image: nginx:alpine
+    restart: always
     ports:
-      - "4300:80" # Akses web Adik lewat port 4300!
+      - "4300:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./public/antrian.html:/usr/share/nginx/html/antrian.html:ro
     depends_on:
       - nextjs_app
 
-  # Jika Adik ingin database ikut di dalam docker
   mongo_db:
     container_name: skl_db
     image: mongo:latest
     restart: always
     volumes:
       - ./mongo_data:/data/db
+    # Tambahan: port 27017 biasanya tidak perlu dibuka ke publik (keamanan)
