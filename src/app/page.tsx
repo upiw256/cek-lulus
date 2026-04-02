@@ -162,6 +162,19 @@ export default function HalamanCekKelulusan() {
       doc.text(`${tglSurat}`, 140, ttdY);
       doc.text(`Kepala ${process.env.NEXT_PUBLIC_SCHOOL_NAME}`, 140, ttdY + 7);
       
+      if (data.pengaturan?.cap_image) {
+        try {
+          // Tambahkan argumen format 'PNG' agar parameter letak (x, y, w, h) tidak bergeser
+          doc.addImage(data.pengaturan.cap_image, "PNG", 115, ttdY - 5, 35, 35);
+        } catch (e) { console.error("Error cap:", e); }
+      }
+
+      if (data.pengaturan?.ttd_image) {
+        try {
+          doc.addImage(data.pengaturan.ttd_image, "PNG", 145, ttdY + 5, 30, 20);
+        } catch (e) { console.error("Error ttd:", e); }
+      }
+      
       doc.text(`${kepsek.toUpperCase()}`, 140, ttdY + 30);
       doc.line(140, ttdY + 31, 195, ttdY + 31); // Garis bawah nama kepsek
       doc.text(`NIP. ${nip}`, 140, ttdY + 36);

@@ -9,6 +9,7 @@ import StatCard from "@/components/admin/StatCard";
 import UploadBox from "@/components/admin/UploadBox";
 import TableSiswa from "@/components/admin/TableSiswa";
 import SettingPage from "@/components/admin/SettingPage";
+import TTEPage from "@/components/admin/TTEPage";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -193,15 +194,7 @@ export default function AdminDashboard() {
           )}
           {activeTab === "settings" && <SettingPage />}
 
-          {/* TAB LAINNYA (Coming Soon) */}
-          {activeTab === "tte" && (
-            <div className="card text-center p-20 opacity-50 border-dashed border-2">
-              <p className="text-slate-400">
-                Fitur {menus.find((m) => m.id === activeTab)?.name} sedang
-                dikembangkan...
-              </p>
-            </div>
-          )}
+          {activeTab === "tte" && <TTEPage />}
         </div>
       </main>
     </div>

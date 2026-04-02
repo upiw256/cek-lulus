@@ -19,10 +19,11 @@ const SettingsSchema = new Schema({
   tahun_ajaran: { type: String, default: "2024/2025" },
   tgl_surat: { type: String, default: "Juni 2026" },
   is_active: { type: Boolean, default: true },
-  // Tambahan: Nomor Surat jika ingin diatur dari setting juga
-  nomor_surat: { type: String, default: "056/KPG.01.06/SMAN1MARGAASIH" }
+  nomor_surat: { type: String, default: "056/KPG.01.06/SMAN1MARGAASIH" },
+  ttd_image: { type: String, default: "" }, // Base64 Tanda Tangan
+  cap_image: { type: String, default: "" }  // Base64 Cap Sekolah
 }, { 
-  timestamps: true // Supaya kita tahu kapan terakhir kali pengaturan diubah
+  timestamps: true 
 });
 
 // 2. Buat Modelnya
