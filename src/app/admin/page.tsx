@@ -21,10 +21,10 @@ export default function AdminDashboard() {
   // --- STATE DATA & UPLOAD ---
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ total: 1200, lulus: 1200, tunda: 0 });
+  const [stats] = useState({ total: 1200, lulus: 1200, tunda: 0 });
 
   const [allSiswa, setAllSiswa] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+
 
   const fetchSiswa = async () => {
   const res = await fetch("/api/admin/siswa");
@@ -35,11 +35,6 @@ export default function AdminDashboard() {
   useEffect(() => {
   if (activeTab === "siswa") fetchSiswa();
   }, [activeTab]);
-
-  const filteredSiswa = allSiswa.filter((s: any) => 
-  s.nama.toLowerCase().includes(searchQuery.toLowerCase()) || 
-  s.nisn.includes(searchQuery)
-  );
 
   // Menu navigasi sidebar
   const menus = [
@@ -82,7 +77,7 @@ export default function AdminDashboard() {
       } else {
         alert("❌ Gagal: " + result.error);
       }
-    } catch (err) {
+    } catch {
       alert("❌ Terjadi kesalahan koneksi.");
     } finally {
       setLoading(false);

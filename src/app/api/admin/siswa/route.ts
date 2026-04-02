@@ -7,7 +7,7 @@ export async function GET() {
     await connectDB();
     const data = await Siswa.find().sort({ createdAt: -1 }); // Ambil semua data, yang terbaru di atas
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Gagal mengambil data" },
       { status: 500 },
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const newSiswa = new Siswa({ nama, nisn, nis, tempat_lahir, tgl_lahir, nama_ayah, status_lulus: status, kelas });
     await newSiswa.save();
     return NextResponse.json(newSiswa, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Gagal menambahkan data" },
       { status: 500 },

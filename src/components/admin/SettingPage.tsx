@@ -41,7 +41,11 @@ export default function SettingPage() {
     setLoading(true);
     try {
       // Bersihkan field ID agar tidak error di MongoDB
-      const { _id, __v, createdAt, updatedAt, ...payload } = settings as any;
+      const payload = { ...settings } as any;
+      delete payload._id;
+      delete payload.__v;
+      delete payload.createdAt;
+      delete payload.updatedAt;
 
       const res = await fetch("/api/admin/setting", {
         method: "POST",

@@ -49,25 +49,25 @@ export async function POST(req: NextRequest) {
         console.log(`Baris ${rowNumber}:`, { nisn, nama, nama_ayah, tgl_lahir, kelas, statusRaw });
 
         // Validasi: pastikan data penting tidak kosong sebelum di-push
-        if (nisn && nama && nama_ayah) { 
+        if (nisn && nama) { 
           dataSiswa.push({
-            nis,
-            nisn,
-            nama,
-            tempat_lahir,
-            tgl_lahir,
-            nama_ayah,
+            nis: nis || "-",
+            nisn: nisn || "-",
+            nama: nama || "-",
+            tempat_lahir: tempat_lahir || "-",
+            tgl_lahir: tgl_lahir || "-",
+            nama_ayah: nama_ayah || "-",
             status_lulus: statusRaw === "lulus",
-            kelas,
+            kelas: kelas || "-",
           });
         } else {
-          console.warn(`⚠️ Baris ${rowNumber} dilewati karena data tidak lengkap (Cek Nama Ayah!)`);
+          console.warn(`⚠️ Baris ${rowNumber} dilewati karena data tidak lengkap (Cek NISN dan Nama!)`);
         }
       }
     });
 
     if (dataSiswa.length === 0) {
-      return NextResponse.json({ error: "Tidak ada data valid yang bisa diimport. Cek kolom Nama Ayah!" }, { status: 400 });
+      return NextResponse.json({ error: "Tidak ada data valid yang bisa diimport. Cek kolom NISN dan Nama!" }, { status: 400 });
     }
 
     await Siswa.deleteMany({}); 

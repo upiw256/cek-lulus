@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 // 1. Definisikan Struktur Data (Schema)
 const SiswaSchema = new Schema({

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import confetti from "canvas-confetti";
+import Image from "next/image";
 
 export default function HalamanCekKelulusan() {
   const [nisn, setNisn] = useState("");
@@ -61,7 +62,7 @@ export default function HalamanCekKelulusan() {
         setPesanError(result.error);
         refreshCaptcha();
       }
-    } catch (err) {
+    } catch {
       setPesanError("Koneksi bermasalah, coba lagi ya!");
     } finally {
       setIsLoading(false);
@@ -71,7 +72,7 @@ export default function HalamanCekKelulusan() {
   const downloadPDF = (data: any) => {
     const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
     const doc = new jsPDF();
-    const img = new Image();
+    const img = new window.Image();
     const kepsek = data.pengaturan?.nama_kepsek || "Nama Default";
     const nip = data.pengaturan?.nip_kepsek || "NIP Default";
     const nomorSurat = data.pengaturan?.nomor_surat || "Nomor Default";
@@ -173,7 +174,7 @@ export default function HalamanCekKelulusan() {
     <div className="min-h-screen bg-slate-300 flex items-center justify-center p-6">
       <div className="bg-white w-full max-w-md rounded-[3rem] p-8 shadow-2xl border border-slate-100">
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3 flex justify-center"><img src={"logo.png"} className="w-30 h-35"/></div>
+          <div className="text-5xl mb-3 flex justify-center"><Image src="/logo.png" alt="Logo CekLulus" width={120} height={140} className="w-30 h-35"/></div>
           <h1 className="text-2xl font-black text-slate-800 uppercase">Cek Kelulusan</h1>
           <p className="text-sm text-slate-400 font-medium">Gunakan NISN dan Tanggal Lahirmu</p>
         </div>

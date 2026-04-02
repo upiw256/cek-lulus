@@ -50,7 +50,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ message: "Data berhasil dihapus selamanya!" });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Gagal menghapus data" }, { status: 500 });
   }
 }

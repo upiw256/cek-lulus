@@ -28,7 +28,7 @@ export default function LoginPage() {
       } else {
         setError("Password yang kamu masukkan salah, coba lagi ya!");
       }
-    } catch (err) {
+    } catch {
       setError("Duh, sepertinya ada masalah koneksi.");
     } finally {
       setLoading(false);

@@ -10,7 +10,7 @@ export async function GET() {
     
     // Kalau belum ada data sama sekali, kirim objek kosong agar frontend tidak error
     return NextResponse.json(setting || {});
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Gagal mengambil data" }, { status: 500 });
   }
 }

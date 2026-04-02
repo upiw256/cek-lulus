@@ -38,7 +38,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
         setDeletingId(null);
         onRefresh();
       }
-    } catch (err) {
+    } catch {
       alert("❌ Gagal menghapus data");
     }
   };
@@ -59,7 +59,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
         setEditingSiswa(null);
         onRefresh();
       }
-    } catch (err) {
+    } catch {
       alert("❌ Gagal update data");
     } finally {
       setIsSubmitting(false);
@@ -92,7 +92,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
         });
         onRefresh();
       }
-    } catch (err) {
+    } catch {
       alert("❌ Gagal tambah data");
     } finally {
       setIsSubmitting(false);
