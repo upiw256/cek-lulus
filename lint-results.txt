@@ -1,0 +1,71 @@
+
+> cek-lulus@0.1.0 lint
+> eslint
+
+
+D:\cek-lulus\src\app\admin\page.tsx
+  24:17  warning  'setStats' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  27:23  warning  'setSearchQuery' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  39:9   warning  'filteredSiswa' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  39:45  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  85:14  warning  'err' is defined but never used                      @typescript-eslint/no-unused-vars
+
+D:\cek-lulus\src\app\api\admin\setting\route.ts
+  13:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  39:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\app\api\admin\siswa\[id]\route.ts
+  53:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\cek-lulus\src\app\api\admin\siswa\route.ts
+  10:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  25:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\cek-lulus\src\app\api\admin\upload\route.ts
+  21:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\app\login\page.tsx
+  31:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\cek-lulus\src\app\page.tsx
+   14:48  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   64:14  warning  'err' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   71:30  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  114:31  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  133:34  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  176:62  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  176:62  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+D:\cek-lulus\src\components\admin\SettingPage.tsx
+  44:15  warning  '_id' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  44:20  warning  '__v' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  44:25  warning  'createdAt' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  44:36  warning  'updatedAt' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  44:74  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  59:19  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\components\admin\Sidebar.tsx
+  1:80  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  8:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\components\admin\StatCard.tsx
+  1:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  2:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\components\admin\TableSiswa.tsx
+    5:9   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   14:52  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   41:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+   62:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+   95:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  104:9   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\components\admin\UploadBox.tsx
+  52:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\cek-lulus\src\models\model.ts
+  1:8  warning  'mongoose' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 38 problems (18 errors, 20 warnings)
+
