@@ -99,11 +99,15 @@ export const generateSKL = (data: any) => {
     // Debugging: Cek status tte di console
     console.log("Status TTE di PDF:", set?.show_tte);
 
-    // Tambahkan TTD & Cap (Hanya jika diaktifkan di setting)
-    // Kita cek secara eksplisit === true agar lebih aman
+    // Tambahkan TTD & Cap (Hanya jika diaktifkan di setting dan gambar ada)
     if (set?.show_tte === true) {
-      doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, 40, 20);
-      doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, 30, 30);
+      // Cek apakah gambar berhasil dimuat (width > 0)
+      if (imgTtd.complete && imgTtd.naturalWidth > 0) {
+        doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, set.sig_width || 40, set.sig_height || 20);
+      }
+      if (imgCap.complete && imgCap.naturalWidth > 0) {
+        doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, set.stamp_width || 30, set.stamp_height || 30);
+      }
     }
 
     doc.setFont("helvetica", "bold");

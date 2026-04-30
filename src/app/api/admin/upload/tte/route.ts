@@ -33,3 +33,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Gagal upload file" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { type } = await req.json(); // 'signature' atau 'stamp'
+    const fileName = type === "signature" ? "signature.png" : "stamp.png";
+    const filePath = path.join(process.cwd(), "public", "tte", fileName);
+
+    await fs.unlink(filePath);
+
+    return NextResponse.json({ success: true, message: "File berhasil dihapus" });
+  } catch (error: any) {
+    return NextResponse.json({ error: "Gagal menghapus file atau file tidak ditemukan" }, { status: 500 });
+  }
+}

@@ -23,6 +23,10 @@ const SettingsSchema = new Schema({
   // Tambahan: Nomor Surat jika ingin diatur dari setting juga
   nomor_surat: { type: String, default: "056/KPG.01.06/SMAN1MARGAASIH" },
   show_tte: { type: Boolean, default: true }, // Baris Baru: Toggle TTE/Cap di PDF
+  sig_width: { type: Number, default: 40 },
+  sig_height: { type: Number, default: 20 },
+  stamp_width: { type: Number, default: 30 },
+  stamp_height: { type: Number, default: 30 },
 }, { 
   timestamps: true // Supaya kita tahu kapan terakhir kali pengaturan diubah
 });

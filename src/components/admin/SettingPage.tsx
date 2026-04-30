@@ -14,11 +14,15 @@ export default function SettingPage() {
     nomor_surat: "",
     is_active: true,
     show_tte: true,
+    sig_width: 40,
+    sig_height: 20,
+    stamp_width: 30,
+    stamp_height: 30,
   });
 
   // State untuk preview gambar agar langsung berubah saat upload
-  const [sigPreview, setSigPreview] = useState(`/tte/signature.png?t=${Date.now()}`);
-  const [stampPreview, setStampPreview] = useState(`/tte/stamp.png?t=${Date.now()}`);
+  const [sigPreview, setSigPreview] = useState<string | null>(`/tte/signature.png?t=${Date.now()}`);
+  const [stampPreview, setStampPreview] = useState<string | null>(`/tte/stamp.png?t=${Date.now()}`);
 
   // 1. Ambil data setting dari database saat halaman dibuka
   useEffect(() => {
@@ -69,6 +73,30 @@ export default function SettingPage() {
       }
     } catch (err) {
       alert("❌ Gagal upload gambar");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteFile = async (type: 'signature' | 'stamp') => {
+    if (!confirm(`Apakah Anda yakin ingin menghapus ${type === 'signature' ? 'Tanda Tangan' : 'Cap Sekolah'}?`)) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/upload/tte", {
+        method: "DELETE",
+        body: JSON.stringify({ type }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (type === 'signature') setSigPreview(null);
+        else setStampPreview(null);
+        alert("✅ Berhasil dihapus!");
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      alert("❌ Gagal menghapus: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -179,38 +207,108 @@ export default function SettingPage() {
           <div className="flex flex-col items-center p-6 border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50">
             <p className="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">Tanda Tangan Kepsek</p>
             <div className="h-32 w-full flex items-center justify-center bg-white rounded-2xl mb-4 p-2 shadow-sm">
-              <img 
-                src={sigPreview} 
-                alt="TTD" 
-                className="max-h-full object-contain"
-                onError={(e) => (e.currentTarget.src = "https://placehold.co/300x150?text=Upload+TTD")}
-              />
+              {sigPreview ? (
+                <img 
+                    src={sigPreview} 
+                    alt="TTD" 
+                    className="max-h-full object-contain"
+                    onError={() => setSigPreview(null)}
+                />
+              ) : (
+                <div className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">⚠️ Belum Ada TTD</div>
+              )}
             </div>
-            <label className="w-full">
-              <input type="file" accept="image/png" onChange={(e) => handleUploadFile(e, 'signature')} className="hidden" />
-              <div className="text-center py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-slate-50 transition-all shadow-sm">
-                Ganti Tanda Tangan
-              </div>
-            </label>
+            
+            {/* Input Ukuran TTD */}
+            <div className="grid grid-cols-2 gap-4 mb-4 w-full">
+                <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Lebar (px)</label>
+                    <input 
+                        type="number" 
+                        value={settings.sig_width} 
+                        onChange={(e) => setSettings({...settings, sig_width: Number(e.target.value)})}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                    />
+                </div>
+                <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tinggi (px)</label>
+                    <input 
+                        type="number" 
+                        value={settings.sig_height} 
+                        onChange={(e) => setSettings({...settings, sig_height: Number(e.target.value)})}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                    />
+                </div>
+            </div>
+
+            <div className="flex w-full gap-2">
+                <label className="flex-1">
+                <input type="file" accept="image/png" onChange={(e) => handleUploadFile(e, 'signature')} className="hidden" />
+                <div className="text-center py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-slate-50 transition-all shadow-sm">
+                    Ganti
+                </div>
+                </label>
+                <button 
+                onClick={() => handleDeleteFile('signature')}
+                className="px-4 py-3 bg-red-50 text-red-500 border border-red-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-100 transition-all"
+                >
+                Hapus
+                </button>
+            </div>
           </div>
 
           {/* Cap Sekolah */}
           <div className="flex flex-col items-center p-6 border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50">
             <p className="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">Cap Resmi Sekolah</p>
             <div className="h-32 w-full flex items-center justify-center bg-white rounded-2xl mb-4 p-2 shadow-sm">
-              <img 
-                src={stampPreview} 
-                alt="Cap" 
-                className="max-h-full object-contain"
-                onError={(e) => (e.currentTarget.src = "https://placehold.co/300x150?text=Upload+Cap")}
-              />
+              {stampPreview ? (
+                <img 
+                    src={stampPreview} 
+                    alt="Cap" 
+                    className="max-h-full object-contain"
+                    onError={() => setStampPreview(null)}
+                />
+              ) : (
+                <div className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">⚠️ Belum Ada Cap</div>
+              )}
             </div>
-            <label className="w-full">
-              <input type="file" accept="image/png" onChange={(e) => handleUploadFile(e, 'stamp')} className="hidden" />
-              <div className="text-center py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-slate-50 transition-all shadow-sm">
-                Ganti Cap Sekolah
-              </div>
-            </label>
+
+            {/* Input Ukuran Cap */}
+            <div className="grid grid-cols-2 gap-4 mb-4 w-full">
+                <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Lebar (px)</label>
+                    <input 
+                        type="number" 
+                        value={settings.stamp_width} 
+                        onChange={(e) => setSettings({...settings, stamp_width: Number(e.target.value)})}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                    />
+                </div>
+                <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tinggi (px)</label>
+                    <input 
+                        type="number" 
+                        value={settings.stamp_height} 
+                        onChange={(e) => setSettings({...settings, stamp_height: Number(e.target.value)})}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                    />
+                </div>
+            </div>
+
+            <div className="flex w-full gap-2">
+                <label className="flex-1">
+                <input type="file" accept="image/png" onChange={(e) => handleUploadFile(e, 'stamp')} className="hidden" />
+                <div className="text-center py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-slate-50 transition-all shadow-sm">
+                    Ganti
+                </div>
+                </label>
+                <button 
+                onClick={() => handleDeleteFile('stamp')}
+                className="px-4 py-3 bg-red-50 text-red-500 border border-red-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-100 transition-all"
+                >
+                Hapus
+                </button>
+            </div>
           </div>
         </div>
       </SettingsCard>
