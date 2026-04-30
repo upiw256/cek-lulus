@@ -10,6 +10,7 @@ const SiswaSchema = new Schema({
   nama_ayah: { type: String, required: true }, // Tambahan Nama Ayah
   status_lulus: { type: Boolean, default: false },
   kelas: { type: String, required: true }, // Tambahan Kelas
+  rata_rata_nilai: { type: String, default: "-" }, // Tambahan Rata-rata Nilai
 }, { timestamps: true });
 
 const SettingsSchema = new Schema({
@@ -20,14 +21,18 @@ const SettingsSchema = new Schema({
   tgl_surat: { type: String, default: "Juni 2026" },
   is_active: { type: Boolean, default: true },
   // Tambahan: Nomor Surat jika ingin diatur dari setting juga
-  nomor_surat: { type: String, default: "056/KPG.01.06/SMAN1MARGAASIH" }
+  nomor_surat: { type: String, default: "056/KPG.01.06/SMAN1MARGAASIH" },
+  show_tte: { type: Boolean, default: true }, // Baris Baru: Toggle TTE/Cap di PDF
 }, { 
   timestamps: true // Supaya kita tahu kapan terakhir kali pengaturan diubah
 });
 
 // 2. Buat Modelnya
-// Cek dulu apakah model sudah ada (untuk mencegah error di Next.js Hot Reload)
-const Siswa = models.Siswa || model("Siswa", SiswaSchema);
-const Setting = models.Setting || model("Setting", SettingsSchema);
+// Di Next.js, kita perlu hapus model dari cache agar schema baru terbaca saat hot reload
+if (models.Siswa) delete (mongoose as any).models.Siswa;
+if (models.Setting) delete (mongoose as any).models.Setting;
+
+const Siswa = model("Siswa", SiswaSchema);
+const Setting = model("Setting", SettingsSchema);
 
 export {Siswa, Setting}; // Ekspor kedua model sekaligus

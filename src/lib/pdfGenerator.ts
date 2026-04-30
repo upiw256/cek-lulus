@@ -71,6 +71,7 @@ export const generateSKL = (data: any) => {
         ["Nama Ayah", `: ${data.nama_ayah}`],
         ["NIS", `: ${data.nis}`],
         ["NISN", `: ${data.nisn}`],
+        ["Rata-rata Nilai", `: ${data.rata_rata_nilai || "-"}`],
       ],
       theme: "plain",
       styles: { fontSize: 11, cellPadding: 1 },
@@ -95,9 +96,15 @@ export const generateSKL = (data: any) => {
     doc.text(`Bandung, ${tglSurat}`, 130, ttdAreaY);
     doc.text(`Kepala SMA Negeri 1 Margaasih,`, 130, ttdAreaY + 7);
 
-    // Tambahkan TTD & Cap (Hanya jika gambar berhasil dimuat)
-    doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, 40, 20);
-    doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, 30, 30);
+    // Debugging: Cek status tte di console
+    console.log("Status TTE di PDF:", set?.show_tte);
+
+    // Tambahkan TTD & Cap (Hanya jika diaktifkan di setting)
+    // Kita cek secara eksplisit === true agar lebih aman
+    if (set?.show_tte === true) {
+      doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, 40, 20);
+      doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, 30, 30);
+    }
 
     doc.setFont("helvetica", "bold");
     doc.text(`${kepsek.toUpperCase()}`, 130, ttdAreaY + 40);

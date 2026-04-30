@@ -44,9 +44,21 @@ export async function POST(req: NextRequest) {
         const nama_ayah = row.getCell(7).text?.trim(); // Kolom G
         const statusRaw = row.getCell(8).text?.trim().toLowerCase();
         const kelas = row.getCell(9).text?.trim(); // Kolom I (Kelas)
+        
+        // Ambil nilai Rata-rata (Kolom J) dan paksa format 2 angka di belakang koma
+        const rawNilai = row.getCell(10).value;
+        let rata_rata_nilai = "-";
+        
+        if (typeof rawNilai === 'number') {
+          rata_rata_nilai = rawNilai.toFixed(2);
+        } else if (typeof rawNilai === 'string' && !isNaN(parseFloat(rawNilai))) {
+          rata_rata_nilai = parseFloat(rawNilai).toFixed(2);
+        } else {
+          rata_rata_nilai = row.getCell(10).text?.trim() || "-";
+        }
 
         // LOG untuk intip data di terminal/console
-        console.log(`Baris ${rowNumber}:`, { nisn, nama, nama_ayah, tgl_lahir, kelas, statusRaw });
+        console.log(`Baris ${rowNumber}:`, { nisn, nama, nama_ayah, tgl_lahir, kelas, statusRaw, rata_rata_nilai });
 
         // Validasi: pastikan data penting tidak kosong sebelum di-push
         if (nisn && nama && nama_ayah) { 
@@ -59,6 +71,7 @@ export async function POST(req: NextRequest) {
             nama_ayah,
             status_lulus: statusRaw === "lulus",
             kelas,
+            rata_rata_nilai,
           });
         } else {
           console.warn(`⚠️ Baris ${rowNumber} dilewati karena data tidak lengkap (Cek Nama Ayah!)`);

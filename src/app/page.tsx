@@ -155,6 +155,10 @@ export default function HalamanCekKelulusan() {
                   <div><p className="text-[10px] text-slate-400">NIS</p>{hasilSiswa.nis}</div>
                   <div><p className="text-[10px] text-slate-400">NAMA AYAH</p>{hasilSiswa.nama_ayah}</div>
                 </div>
+                <div className="border-t pt-2">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">Rata-rata Nilai</p>
+                  <p className="text-xl font-black text-blue-600">{hasilSiswa.rata_rata_nilai || "-"}</p>
+                </div>
               </div>
               
               <div className="flex flex-col gap-2">

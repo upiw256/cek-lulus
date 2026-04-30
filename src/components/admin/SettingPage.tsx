@@ -13,6 +13,7 @@ export default function SettingPage() {
     tgl_surat: "",
     nomor_surat: "",
     is_active: true,
+    show_tte: true,
   });
 
   // State untuk preview gambar agar langsung berubah saat upload
@@ -161,7 +162,19 @@ export default function SettingPage() {
 
       {/* Card Upload TTE & Cap */}
       <SettingsCard title="Legalisasi Digital (PNG)" icon="🖋️" colorClass="text-purple-600">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+          <div>
+            <p className="text-sm font-bold text-slate-700">Tampilkan Legalisasi di PDF</p>
+            <p className="text-xs text-slate-400">Aktifkan jika ingin menyertakan TTE dan Cap Sekolah secara otomatis</p>
+          </div>
+          <button 
+            onClick={() => setSettings({...settings, show_tte: !settings.show_tte})}
+            className={`w-14 h-8 rounded-full transition-all relative ${settings.show_tte ? 'bg-blue-500' : 'bg-slate-200'}`}
+          >
+            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${settings.show_tte ? 'left-7' : 'left-1 shadow-sm'}`} />
+          </button>
+        </div>
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-opacity duration-300 ${!settings.show_tte ? 'opacity-40 grayscale' : ''}`}>
           {/* Tanda Tangan */}
           <div className="flex flex-col items-center p-6 border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50">
             <p className="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">Tanda Tangan Kepsek</p>

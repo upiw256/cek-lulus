@@ -15,6 +15,7 @@ const downloadTemplate = async () => {
     { header: "Nama Ayah", key: "nama_ayah", width: 25 }, // Tambahan
     { header: "Status", key: "status", width: 15 },
     { header: "Kelas", key: "kelas", width: 10 }, // Tambahan
+    { header: "Rata-rata Nilai", key: "rata_rata_nilai", width: 15 }, // Tambahan
   ];
 
   // 2. Tambahkan satu baris contoh agar admin tidak bingung
@@ -28,6 +29,7 @@ const downloadTemplate = async () => {
     nama_ayah: "SUHERMAN",
     status: "Lulus",
     kelas: "12 IPA 1",
+    rata_rata_nilai: "85.50",
   });
 
   // 3. Beri sedikit warna pada header agar cantik
