@@ -1,6 +1,18 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+const formatDateIndo = (dateStr: string) => {
+  if (!dateStr) return dateStr;
+  const parts = dateStr.includes('/') ? dateStr.split('/') : dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  let day, month, year;
+  if (parts[0].length === 4) { [year, month, day] = parts; } 
+  else { [day, month, year] = parts; }
+  const monthName = months[parseInt(month) - 1] || month;
+  return `${day.padStart(2, '0')} ${monthName} ${year}`;
+};
+
 export const generateSKL = (data: any) => {
   const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
   const doc = new jsPDF();
@@ -67,7 +79,7 @@ export const generateSKL = (data: any) => {
       margin: { left: 25 },
       body: [
         ["Nama", `: ${data.nama.toUpperCase()}`],
-        ["Tempat, Tanggal Lahir", `: ${data.tempat_lahir}, ${data.tgl_lahir}`],
+        ["Tempat, Tanggal Lahir", `: ${data.tempat_lahir}, ${formatDateIndo(data.tgl_lahir)}`],
         ["Nama Ayah", `: ${data.nama_ayah}`],
         ["NIS", `: ${data.nis}`],
         ["NISN", `: ${data.nisn}`],
@@ -93,7 +105,7 @@ export const generateSKL = (data: any) => {
 
     // 6. TANDA TANGAN & CAP
     const ttdAreaY = boxY + 45;
-    doc.text(`Bandung, ${tglSurat}`, 130, ttdAreaY);
+    doc.text(`${tglSurat}`, 130, ttdAreaY);
     doc.text(`Kepala SMA Negeri 1 Margaasih,`, 130, ttdAreaY + 7);
 
     // Debugging: Cek status tte di console
