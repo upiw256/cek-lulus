@@ -39,6 +39,7 @@ const SettingsSchema = new Schema({
   text_menerangkan: { type: String, default: "Dengan ini menerangkan bahwa :" },
   text_keputusan: { type: String, default: "Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran {tahun_ajaran}, siswa tersebut di atas telah dinyatakan :" },
   text_penutup: { type: String, default: "Demikian Surat Keterangan Lulus ini dibuat agar dapat digunakan keperluan lain sesuai kebutuhan." },
+  paper_size: { type: String, default: "a4" }, // 'a4' or 'f4'
 }, { 
   timestamps: true // Supaya kita tahu kapan terakhir kali pengaturan diubah
 });

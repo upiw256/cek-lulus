@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import { generateSKL } from "@/lib/pdfGenerator";
 
-const SCALE = 3.78; // 1mm = 3.78px (Standard 96 DPI). A4 = 210mm x 297mm => 793.8px x 1122.6px
-const PAGE_WIDTH = 210 * SCALE;
-const PAGE_HEIGHT = 297 * SCALE;
+const SCALE = 3.78; // 1mm = 3.78px (Standard 96 DPI). 
 
 export default function PdfSettingPage() {
   const [loading, setLoading] = useState(false);
@@ -94,6 +92,9 @@ export default function PdfSettingPage() {
 
   if (!settings) return <div className="p-10 text-center">Loading settings...</div>;
 
+  const pageWidth = (settings.paper_size === "f4" ? 210 : 210) * SCALE;
+  const pageHeight = (settings.paper_size === "f4" ? 330 : 297) * SCALE;
+
   const ElementBox = ({ title, x, y, w, h, id, children }: any) => (
     <Rnd
       size={{ width: w * SCALE, height: h * SCALE }}
@@ -132,7 +133,21 @@ export default function PdfSettingPage() {
           <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase px-1">Visual Layout & Wording Editor</p>
         </div>
 
-        <div className="space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar pr-2">
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
+          <div className="space-y-4">
+             <div className="flex justify-between items-center border-b pb-2">
+                <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider">Ukuran Kertas</h3>
+                <select 
+                    value={settings.paper_size || "a4"} 
+                    onChange={(e) => setSettings({...settings, paper_size: e.target.value})}
+                    className="text-[10px] bg-slate-50 border border-slate-100 px-3 py-1 rounded-full font-bold outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                >
+                    <option value="a4">A4 (210x297mm)</option>
+                    <option value="f4">F4 (210x330mm)</option>
+                </select>
+             </div>
+          </div>
+
           <div className="space-y-4">
              <div className="flex justify-between items-center border-b pb-2">
                 <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider">Kop Surat</h3>
@@ -219,12 +234,12 @@ export default function PdfSettingPage() {
       <div className="flex-1 flex justify-center bg-slate-100/50 p-4 lg:p-12 rounded-[3.5rem] border border-slate-200/50 overflow-auto min-h-[900px] backdrop-blur-sm">
         <div 
             style={{ 
-                width: PAGE_WIDTH, 
-                height: PAGE_HEIGHT, 
+                width: pageWidth, 
+                height: pageHeight, 
                 fontFamily: 'Arial, sans-serif',
                 color: '#000'
             }}
-            className="bg-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] relative flex-shrink-0"
+            className="bg-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] relative flex-shrink-0 transition-all duration-500"
         >
           {/* Watermark/Grid Helper line for margins */}
           <div className="absolute inset-x-[10mm] inset-y-[10mm] border border-dashed border-slate-100 pointer-events-none" style={{

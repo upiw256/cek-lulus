@@ -14,10 +14,16 @@ const formatDateIndo = (dateStr: string) => {
 };
 
 export const generateSKL = (data: any) => {
-  const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
-  const doc = new jsPDF();
-  
   const set = data.pengaturan;
+  const paperFormat = set?.paper_size === "f4" ? [210, 330] : "a4";
+  const doc = new jsPDF({
+    orientation: "p",
+    unit: "mm",
+    format: paperFormat,
+  });
+
+  const lulus = data.status_lulus ? "LULUS" : "TIDAK LULUS";
+  
   const kepsek = set?.nama_kepsek || "Nama Kepala Sekolah";
   const nip = set?.nip_kepsek || "NIP. -";
   const pangkat = set?.pangkat || "-";
