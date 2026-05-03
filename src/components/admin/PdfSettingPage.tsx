@@ -169,26 +169,6 @@ export default function PdfSettingPage() {
           </div>
 
           <div className="space-y-4 pt-2 border-t border-slate-100">
-             <h3 className="font-bold text-slate-700 text-sm border-b pb-2 uppercase tracking-wider">Profil Sekolah & Surat</h3>
-             <div className="space-y-4">
-                  <div className="space-y-1">
-                     <label className="text-[10px] font-bold text-slate-400 uppercase">Nama Sekolah (Di TTD)</label>
-                     <input type="text" value={settings.nama_sekolah} onChange={(e) => setSettings({...settings, nama_sekolah: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">Kota Surat</label>
-                        <input type="text" value={settings.kota_surat} onChange={(e) => setSettings({...settings, kota_surat: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">Tgl Surat</label>
-                        <input type="text" value={settings.tgl_surat} onChange={(e) => setSettings({...settings, tgl_surat: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
-                      </div>
-                  </div>
-             </div>
-          </div>
-
-          <div className="space-y-4 pt-2 border-t border-slate-100">
              <h3 className="font-bold text-slate-700 text-sm border-b pb-2 uppercase tracking-wider">Tanda Tangan & Cap</h3>
              <div className="grid grid-cols-2 gap-4">
                  <div className="space-y-1">

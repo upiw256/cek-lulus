@@ -219,27 +219,6 @@ export default function SettingPage() {
               )}
             </div>
             
-            {/* Input Ukuran TTD */}
-            <div className="grid grid-cols-2 gap-4 mb-4 w-full">
-                <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-slate-400 uppercase">Lebar (px)</label>
-                    <input 
-                        type="number" 
-                        value={settings.sig_width} 
-                        onChange={(e) => setSettings({...settings, sig_width: Number(e.target.value)})}
-                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
-                    />
-                </div>
-                <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tinggi (px)</label>
-                    <input 
-                        type="number" 
-                        value={settings.sig_height} 
-                        onChange={(e) => setSettings({...settings, sig_height: Number(e.target.value)})}
-                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
-                    />
-                </div>
-            </div>
 
             <div className="flex w-full gap-2">
                 <label className="flex-1">
@@ -273,27 +252,6 @@ export default function SettingPage() {
               )}
             </div>
 
-            {/* Input Ukuran Cap */}
-            <div className="grid grid-cols-2 gap-4 mb-4 w-full">
-                <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-slate-400 uppercase">Lebar (px)</label>
-                    <input 
-                        type="number" 
-                        value={settings.stamp_width} 
-                        onChange={(e) => setSettings({...settings, stamp_width: Number(e.target.value)})}
-                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
-                    />
-                </div>
-                <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tinggi (px)</label>
-                    <input 
-                        type="number" 
-                        value={settings.stamp_height} 
-                        onChange={(e) => setSettings({...settings, stamp_height: Number(e.target.value)})}
-                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold"
-                    />
-                </div>
-            </div>
 
             <div className="flex w-full gap-2">
                 <label className="flex-1">
