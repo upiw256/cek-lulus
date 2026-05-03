@@ -142,7 +142,7 @@ export const generateSKL = (data: any) => {
     doc.text(`${kota}, ${tglSurat}`, sigX, sigY - 12);
     doc.text(`Kepala ${set?.nama_sekolah || "SMA Negeri 1 Margaasih"},`, sigX, sigY - 5);
 
-    // Tambahkan TTD & Cap
+    // Tambahkan TTD & Cap (DI RENDER DULU AGAR DI BELAKANG TEKS)
     if (set?.show_tte === true) {
       if (imgTtd.complete && imgTtd.naturalWidth > 0) {
         doc.addImage(imgTtd, 'PNG', sigX, sigY, sigW, sigH);
@@ -152,7 +152,7 @@ export const generateSKL = (data: any) => {
       }
     }
 
-    // Nama & NIP (HARUS mengikuti posisi TTD Box agar WYSIWYG)
+    // Nama & NIP (DI RENDER KERAKHIR AGAR DI DEPAN GAMBAR)
     doc.setFont("helvetica", "bold");
     const nameY = sigY + sigH + 5;
     doc.text(`${kepsek.toUpperCase()}`, sigX, nameY);
