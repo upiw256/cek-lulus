@@ -136,12 +136,6 @@ export const generateSKL = (data: any) => {
     const stampW = set?.stamp_width || 30;
     const stampH = set?.stamp_height || 30;
 
-    // Teks Tanggal & Jabatan (Masih mengikuti flow teks jika tidak ada setting khusus)
-    // Tapi kita bisa buat ini juga mengikuti sigX jika mau lebih rapi
-    const kota = set?.kota_surat || "Bandung";
-    doc.text(`${kota}, ${tglSurat}`, sigX, sigY - 12);
-    doc.text(`Kepala ${set?.nama_sekolah || "SMA Negeri 1 Margaasih"},`, sigX, sigY - 5);
-
     // Tambahkan TTD & Cap (DI RENDER DULU AGAR DI BELAKANG TEKS)
     if (set?.show_tte === true) {
       if (imgTtd.complete && imgTtd.naturalWidth > 0) {
@@ -152,7 +146,12 @@ export const generateSKL = (data: any) => {
       }
     }
 
-    // Nama & NIP (DI RENDER KERAKHIR AGAR DI DEPAN GAMBAR)
+    // Teks Tanggal, Jabatan, Nama & NIP (DI RENDER KERAKHIR AGAR DI DEPAN GAMBAR)
+    doc.setFont("helvetica", "normal").setFontSize(11);
+    const kota = set?.kota_surat || "Bandung";
+    doc.text(`${kota}, ${tglSurat}`, sigX, sigY - 12);
+    doc.text(`Kepala ${set?.nama_sekolah || "SMA Negeri 1 Margaasih"},`, sigX, sigY - 5);
+
     doc.setFont("helvetica", "bold");
     const nameY = sigY + sigH + 5;
     doc.text(`${kepsek.toUpperCase()}`, sigX, nameY);

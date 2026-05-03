@@ -105,8 +105,8 @@ export default function PdfSettingPage() {
       onResizeStop={(e, direction, ref, delta, position) => {
         setSettings({
           ...settings,
-          [`${id}_width`]: parseFloat(ref.style.width) / SCALE,
-          [`${id}_height`]: parseFloat(ref.style.height) / SCALE,
+          [`${id}_width`]: parseInt(ref.style.width) / SCALE,
+          [`${id}_height`]: parseInt(ref.style.height) / SCALE,
           [`${id}_x`]: position.x / SCALE,
           [`${id}_y`]: position.y / SCALE,
         });
