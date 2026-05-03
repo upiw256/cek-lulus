@@ -29,3 +29,16 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE() {
+  try {
+    await connectDB();
+    await Siswa.deleteMany({});
+    return NextResponse.json({ message: "Semua data siswa berhasil dihapus" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Gagal menghapus semua data" },
+      { status: 500 },
+    );
+  }
+}

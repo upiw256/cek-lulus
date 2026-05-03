@@ -21,7 +21,19 @@ export default function AdminDashboard() {
   // --- STATE DATA & UPLOAD ---
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ total: 1200, lulus: 1200, tunda: 0 });
+  const [stats, setStats] = useState({ total: 0, lulus: 0, tunda: 0 });
+
+  const fetchStats = async () => {
+    try {
+      const res = await fetch("/api/admin/stats");
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch stats:", err);
+    }
+  };
 
   const [allSiswa, setAllSiswa] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,7 +45,8 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-  if (activeTab === "siswa") fetchSiswa();
+    fetchStats();
+    if (activeTab === "siswa") fetchSiswa();
   }, [activeTab]);
 
   const filteredSiswa = allSiswa.filter((s: any) => 
@@ -78,7 +91,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         alert("✅ Berhasil: " + result.message);
         setUploadFile(null);
-        // Opsional: Refresh data statistik di sini
+        fetchStats(); // Refresh stats after upload
       } else {
         alert("❌ Gagal: " + result.error);
       }

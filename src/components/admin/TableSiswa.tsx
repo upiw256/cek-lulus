@@ -28,6 +28,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
 
   // State untuk Hapus
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
 
   // FUNGSI: Hapus Data
   const handleDelete = async (id: string) => {
@@ -40,6 +41,23 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
       }
     } catch (err) {
       alert("❌ Gagal menghapus data");
+    }
+  };
+  
+  // FUNGSI: Hapus Semua Data
+  const handleDeleteAll = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/siswa", { method: "DELETE" });
+      if (res.ok) {
+        alert("🚮 Semua data sudah dibersihkan!");
+        setShowDeleteAllModal(false);
+        onRefresh();
+      }
+    } catch (err) {
+      alert("❌ Gagal menghapus semua data");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -127,12 +145,20 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
             </span>{" "}
             Siswa
           </p>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="mt-3 px-5 py-3 bg-slate-900 text-white rounded-2xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 transition-all text-sm"
-          >
-            ➕ Tambah Siswa Baru
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="mt-3 px-5 py-3 bg-slate-900 text-white rounded-2xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 transition-all text-sm"
+            >
+              ➕ Tambah Siswa Baru
+            </button>
+            <button
+              onClick={() => setShowDeleteAllModal(true)}
+              className="mt-3 px-5 py-3 bg-red-50 text-red-600 rounded-2xl font-bold hover:bg-red-100 active:scale-95 transition-all text-sm"
+            >
+              🗑️ Hapus Semua
+            </button>
+          </div>
         </div>
 
         <div className="relative group w-full md:w-auto">
@@ -517,6 +543,36 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                 className="flex-1 py-3 bg-red-500 text-white rounded-xl font-bold"
               >
                 Ya, Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL KONFIRMASI HAPUS SEMUA */}
+      {showDeleteAllModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+          <div className="bg-white w-full max-w-sm rounded-[2.5rem] p-8 text-center shadow-2xl">
+            <div className="w-16 h-16 bg-red-100 text-red-500 flex items-center justify-center rounded-full mx-auto mb-4 text-2xl animate-bounce">
+              ⚠️
+            </div>
+            <h3 className="text-xl font-black text-slate-800 uppercase italic tracking-tighter">Hapus Semua Data?</h3>
+            <p className="text-xs text-slate-500 my-4 leading-relaxed font-medium">
+              Tindakan ini akan menghapus <span className="text-red-500 font-bold">SELURUH</span> data siswa secara permanen. Yakin nih?
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowDeleteAllModal(false)}
+                className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-bold hover:bg-slate-200 transition-all"
+              >
+                Gas Jadi
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                disabled={isSubmitting}
+                className="flex-1 py-4 bg-red-500 text-white rounded-2xl font-black shadow-lg shadow-red-200 hover:bg-red-600 transition-all active:scale-95 disabled:opacity-50"
+              >
+                {isSubmitting ? "Proses..." : "Hapus Semua!"}
               </button>
             </div>
           </div>
