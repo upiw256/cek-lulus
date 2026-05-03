@@ -126,28 +126,38 @@ export const generateSKL = (data: any) => {
 
     // 6. TANDA TANGAN & CAP
     const ttdAreaY = boxY + 45;
-    doc.text(`${tglSurat}`, 130, ttdAreaY);
-    doc.text(`Kepala SMA Negeri 1 Margaasih,`, 130, ttdAreaY + 7);
+    const sigX = set?.sig_x || 130;
+    const sigY = set?.sig_y || (ttdAreaY + 10);
+    const sigW = set?.sig_width || 40;
+    const sigH = set?.sig_height || 20;
 
-    // Debugging: Cek status tte di console
-    console.log("Status TTE di PDF:", set?.show_tte);
+    const stampX = set?.stamp_x || 110;
+    const stampY = set?.stamp_y || (ttdAreaY + 8);
+    const stampW = set?.stamp_width || 30;
+    const stampH = set?.stamp_height || 30;
 
-    // Tambahkan TTD & Cap (Hanya jika diaktifkan di setting dan gambar ada)
+    // Teks Tanggal & Jabatan (Masih mengikuti flow teks jika tidak ada setting khusus)
+    // Tapi kita bisa buat ini juga mengikuti sigX jika mau lebih rapi
+    doc.text(`${tglSurat}`, sigX, sigY - 12);
+    doc.text(`Kepala SMA Negeri 1 Margaasih,`, sigX, sigY - 5);
+
+    // Tambahkan TTD & Cap
     if (set?.show_tte === true) {
-      // Cek apakah gambar berhasil dimuat (width > 0)
       if (imgTtd.complete && imgTtd.naturalWidth > 0) {
-        doc.addImage(imgTtd, 'PNG', set.sig_x || 135, set.sig_y || (ttdAreaY + 10), set.sig_width || 40, set.sig_height || 20);
+        doc.addImage(imgTtd, 'PNG', sigX, sigY, sigW, sigH);
       }
       if (imgCap.complete && imgCap.naturalWidth > 0) {
-        doc.addImage(imgCap, 'PNG', set.stamp_x || 120, set.stamp_y || (ttdAreaY + 8), set.stamp_width || 30, set.stamp_height || 30);
+        doc.addImage(imgCap, 'PNG', stampX, stampY, stampW, stampH);
       }
     }
 
+    // Nama & NIP (HARUS mengikuti posisi TTD Box agar WYSIWYG)
     doc.setFont("helvetica", "bold");
-    doc.text(`${kepsek.toUpperCase()}`, 130, ttdAreaY + 40);
-    doc.line(130, ttdAreaY + 41, 185, ttdAreaY + 41);
+    const nameY = sigY + sigH + 5;
+    doc.text(`${kepsek.toUpperCase()}`, sigX, nameY);
+    doc.line(sigX, nameY + 1, sigX + 55, nameY + 1);
     doc.setFont("helvetica", "normal");
-    doc.text(`NIP. ${nip}`, 130, ttdAreaY + 46);
+    doc.text(`NIP. ${nip}`, sigX, nameY + 6);
 
     // Selesai!
     doc.save(`SKL_${data.nisn}_${data.nama.split(' ')[0]}.pdf`);

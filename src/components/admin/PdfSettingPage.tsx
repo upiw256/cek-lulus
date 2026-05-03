@@ -259,13 +259,13 @@ export default function PdfSettingPage() {
           </div>
 
           <div className="absolute" style={{ top: 80 * SCALE, left: 20 * SCALE, width: 170 * SCALE }}>
-              <p style={{ fontSize: 11 * 0.3528 * SCALE, marginBottom: 8 * SCALE }}>{settings.text_pembuka}</p>
+              <p style={{ fontSize: 11 * 0.3528 * SCALE, marginBottom: 6 * SCALE }}>{settings.text_pembuka}</p>
               
-              <div style={{ marginLeft: 5 * SCALE }} className="h-20 border border-dotted border-slate-200 mb-4 flex items-center justify-center text-[10px] text-slate-300 uppercase">Data Kepala Sekolah (Auto)</div>
+              <div style={{ marginLeft: 5 * SCALE, height: 26 * SCALE }} className="border border-dotted border-slate-200 mb-4 flex items-center justify-center text-[10px] text-slate-300 uppercase">Data Kepala Sekolah (AutoTable ~26mm)</div>
 
               <p style={{ fontSize: 11 * 0.3528 * SCALE, marginBottom: 4 * SCALE }}>{settings.text_menerangkan}</p>
 
-              <div style={{ marginLeft: 5 * SCALE }} className="h-24 border border-dotted border-slate-200 mb-6 flex items-center justify-center text-[10px] text-slate-300 uppercase">Data Siswa (Auto)</div>
+              <div style={{ marginLeft: 5 * SCALE, height: 38 * SCALE }} className="border border-dotted border-slate-200 mb-6 flex items-center justify-center text-[10px] text-slate-300 uppercase">Data Siswa (AutoTable ~38mm)</div>
 
               <p style={{ fontSize: 11 * 0.3528 * SCALE, marginBottom: 6 * SCALE }}>{settings.text_keputusan?.replace("{tahun_ajaran}", settings.tahun_ajaran)}</p>
 
@@ -284,8 +284,8 @@ export default function PdfSettingPage() {
              <img src={`/tte/stamp.png?t=${Date.now()}`} className="w-full h-full object-contain pointer-events-none" />
           </ElementBox>
 
-          {/* NAMA KEPSEK (Fixed visual guide) */}
-          <div className="absolute" style={{ left: 130 * SCALE, top: (settings.sig_y + settings.sig_height + 5) * SCALE }}>
+          {/* NAMA KEPSEK (Sync with Draggable Sig) */}
+          <div className="absolute transition-all duration-300" style={{ left: settings.sig_x * SCALE, top: (settings.sig_y + settings.sig_height) * SCALE + 2 }}>
               <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="font-bold line-clamp-1">{settings.nama_kepsek.toUpperCase()}</div>
               <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="line-clamp-1">NIP. {settings.nip_kepsek}</div>
           </div>
