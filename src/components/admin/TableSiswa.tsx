@@ -23,6 +23,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
     tgl_lahir: "",
     nama_ayah: "",
     kelas: "",
+    rata_rata_nilai: "",
     status_lulus: true,
   });
 
@@ -111,6 +112,7 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
           tgl_lahir: "",
           nama_ayah: "",
           kelas: "",
+          rata_rata_nilai: "",
           status_lulus: true,
         });
         onRefresh();
@@ -188,6 +190,9 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                 Keluarga & Kelas
               </th>
               <th className="px-6 py-5 font-bold text-slate-500 uppercase text-[10px] tracking-widest text-center">
+                Rata-rata
+              </th>
+              <th className="px-6 py-5 font-bold text-slate-500 uppercase text-[10px] tracking-widest text-center">
                 Status
               </th>
               <th className="px-6 py-5 font-bold text-slate-500 uppercase text-[10px] tracking-widest text-center">
@@ -219,6 +224,11 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                       🏫 Kelas: {s.kelas}
                     </p>
                   </div>
+                </td>
+                <td className="px-6 py-4 text-center">
+                  <span className="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg text-sm">
+                    {s.rata_rata_nilai || "-"}
+                  </span>
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span
@@ -369,6 +379,21 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                   />
                 </div>
               </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase ml-1">
+                  Rata-rata Nilai
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: 88.50"
+                  value={newSiswa.rata_rata_nilai}
+                  onChange={(e) =>
+                    setNewSiswa({ ...newSiswa, rata_rata_nilai: e.target.value })
+                  }
+                  className="w-full px-4 py-3 bg-slate-50 border rounded-2xl outline-none font-bold text-blue-600"
+                />
+              </div>
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
@@ -472,6 +497,15 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
                     value={editingSiswa.kelas}
                     onChange={(e) => setEditingSiswa({ ...editingSiswa, kelas: e.target.value })}
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-widest">Rata-rata</label>
+                  <input
+                    type="text"
+                    value={editingSiswa.rata_rata_nilai}
+                    onChange={(e) => setEditingSiswa({ ...editingSiswa, rata_rata_nilai: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-blue-600"
                   />
                 </div>
               </div>
