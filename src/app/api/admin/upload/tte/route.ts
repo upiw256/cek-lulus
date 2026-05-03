@@ -16,21 +16,31 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Tentukan nama file tetap supaya otomatis tertimpa
-    const fileName = type === "signature" ? "signature.png" : "stamp.png";
-    const filePath = path.join(process.cwd(), "public", "tte", fileName);
+    let fileName = "";
+    let targetFolder = path.join(process.cwd(), "public", "tte");
+    
+    if (type === "signature") fileName = "signature.png";
+    else if (type === "stamp") fileName = "stamp.png";
+    else if (type === "kop") {
+      fileName = "kop.png";
+      targetFolder = path.join(process.cwd(), "public");
+    }
 
-    // Pastikan folder public/tte sudah ada
-    await fs.mkdir(path.join(process.cwd(), "public", "tte"), { recursive: true });
+    const filePath = path.join(targetFolder, fileName);
 
-    // Tulis/Timpah file
+    // Pastikan folder target sudah ada
+    await fs.mkdir(targetFolder, { recursive: true });
+
+    // Tulis/Timpah file (Simpan sebagai buffer)
     await fs.writeFile(filePath, buffer);
 
     return NextResponse.json({ 
       success: true, 
-      url: `/tte/${fileName}?t=${Date.now()}` // Tambah timestamp agar browser tidak cache gambar lama
+      url: type === "kop" ? `/${fileName}` : `/tte/${fileName}`
     });
-  } catch (error) {
-    return NextResponse.json({ error: "Gagal upload file" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Upload Error:", error);
+    return NextResponse.json({ error: "Gagal upload file: " + error.message }, { status: 500 });
   }
 }
 

@@ -25,8 +25,20 @@ const SettingsSchema = new Schema({
   show_tte: { type: Boolean, default: true }, // Baris Baru: Toggle TTE/Cap di PDF
   sig_width: { type: Number, default: 40 },
   sig_height: { type: Number, default: 20 },
+  sig_x: { type: Number, default: 135 },
+  sig_y: { type: Number, default: 215 },
   stamp_width: { type: Number, default: 30 },
   stamp_height: { type: Number, default: 30 },
+  stamp_x: { type: Number, default: 120 },
+  stamp_y: { type: Number, default: 213 },
+  kop_width: { type: Number, default: 190 },
+  kop_height: { type: Number, default: 40 },
+  kop_x: { type: Number, default: 10 },
+  kop_y: { type: Number, default: 10 },
+  text_pembuka: { type: String, default: "Yang bertanda tangan dibawah ini :" },
+  text_menerangkan: { type: String, default: "Dengan ini menerangkan bahwa :" },
+  text_keputusan: { type: String, default: "Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran {tahun_ajaran}, siswa tersebut di atas telah dinyatakan :" },
+  text_penutup: { type: String, default: "Demikian Surat Keterangan Lulus ini dibuat agar dapat digunakan keperluan lain sesuai kebutuhan." },
 }, { 
   timestamps: true // Supaya kita tahu kapan terakhir kali pengaturan diubah
 });

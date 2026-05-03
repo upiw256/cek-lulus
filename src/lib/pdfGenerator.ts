@@ -43,8 +43,22 @@ export const generateSKL = (data: any) => {
 
   // Kita pakai Async/Await supaya lebih rapi daripada callback bertingkat
   Promise.all([loadImage(imgKop), loadImage(imgTtd), loadImage(imgCap)]).then(() => {
+    // Helper untuk mengganti placeholder
+    const replacePlaceholders = (text: string) => {
+      if (!text) return "";
+      return text
+        .replace(/{tahun_ajaran}/g, tahunAjaran)
+        .replace(/{{nama}}/g, data.nama.toUpperCase())
+        .replace(/{{nisn}}/g, data.nisn)
+        .replace(/{{nis}}/g, data.nis)
+        .replace(/{{tempat_lahir}}/g, data.tempat_lahir)
+        .replace(/{{tgl_lahir}}/g, formatDateIndo(data.tgl_lahir))
+        .replace(/{{rata_rata_nilai}}/g, data.rata_rata_nilai || "-")
+        .replace(/{{status_lulus}}/g, lulus);
+    };
+
     // 1. KOP SURAT
-    doc.addImage(imgKop, 'PNG', 10, 10, 190, 40); 
+    doc.addImage(imgKop, 'PNG', set?.kop_x || 10, set?.kop_y || 10, set?.kop_width || 190, set?.kop_height || 40); 
 
     // 2. JUDUL SURAT
     doc.setFont("helvetica", "bold");
@@ -56,7 +70,7 @@ export const generateSKL = (data: any) => {
     doc.line(65, 69, 145, 69);
 
     // 3. DATA KEPALA SEKOLAH
-    doc.text("Yang bertanda tangan dibawah ini :", 20, 80);
+    doc.text(replacePlaceholders(set?.text_pembuka || "Yang bertanda tangan dibawah ini :"), 20, 80);
     autoTable(doc, {
       startY: 83,
       margin: { left: 25 },
@@ -73,7 +87,7 @@ export const generateSKL = (data: any) => {
 
     // 4. DATA SISWA
     const middleY = (doc as any).lastAutoTable.finalY + 10;
-    doc.text("Dengan ini menerangkan bahwa :", 20, middleY);
+    doc.text(replacePlaceholders(set?.text_menerangkan || "Dengan ini menerangkan bahwa :"), 20, middleY);
     autoTable(doc, {
       startY: middleY + 3,
       margin: { left: 25 },
@@ -92,7 +106,8 @@ export const generateSKL = (data: any) => {
 
     // 5. STATUS KELULUSAN
     const statementY = (doc as any).lastAutoTable.finalY + 15;
-    doc.text(`Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran ${tahunAjaran}, siswa tersebut di atas telah dinyatakan :`, 20, statementY, { maxWidth: 170 });
+    const textKeputusan = replacePlaceholders(set?.text_keputusan || "Berdasarkan hasil evaluasi pembelajaran Tahun Pelajaran {tahun_ajaran}, siswa tersebut di atas telah dinyatakan :");
+    doc.text(textKeputusan, 20, statementY, { maxWidth: 170 });
 
     const boxY = statementY + 10;
     doc.setLineWidth(0.5);
@@ -101,7 +116,7 @@ export const generateSKL = (data: any) => {
     doc.text(`${lulus}`, 105, boxY + 10, { align: "center" });
 
     doc.setFont("helvetica", "normal").setFontSize(11);
-    doc.text("Demikian Surat Keterangan Lulus ini dibuat agar dapat digunakan keperluan lain sesuai kebutuhan.", 20, boxY + 25);
+    doc.text(replacePlaceholders(set?.text_penutup || "Demikian Surat Keterangan Lulus ini dibuat agar dapat digunakan keperluan lain sesuai kebutuhan."), 20, boxY + 25);
 
     // 6. TANDA TANGAN & CAP
     const ttdAreaY = boxY + 45;
@@ -115,10 +130,10 @@ export const generateSKL = (data: any) => {
     if (set?.show_tte === true) {
       // Cek apakah gambar berhasil dimuat (width > 0)
       if (imgTtd.complete && imgTtd.naturalWidth > 0) {
-        doc.addImage(imgTtd, 'PNG', 135, ttdAreaY + 10, set.sig_width || 40, set.sig_height || 20);
+        doc.addImage(imgTtd, 'PNG', set.sig_x || 135, set.sig_y || (ttdAreaY + 10), set.sig_width || 40, set.sig_height || 20);
       }
       if (imgCap.complete && imgCap.naturalWidth > 0) {
-        doc.addImage(imgCap, 'PNG', 120, ttdAreaY + 8, set.stamp_width || 30, set.stamp_height || 30);
+        doc.addImage(imgCap, 'PNG', set.stamp_x || 120, set.stamp_y || (ttdAreaY + 8), set.stamp_width || 30, set.stamp_height || 30);
       }
     }
 

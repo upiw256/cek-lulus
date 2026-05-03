@@ -9,6 +9,7 @@ import StatCard from "@/components/admin/StatCard";
 import UploadBox from "@/components/admin/UploadBox";
 import TableSiswa from "@/components/admin/TableSiswa";
 import SettingPage from "@/components/admin/SettingPage";
+import PdfSettingPage from "@/components/admin/PdfSettingPage";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -184,7 +185,7 @@ export default function AdminDashboard() {
         </header>
 
         {/* ISI KONTEN BERDASARKAN TAB */}
-        <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <div className={`p-4 lg:p-4 ${activeTab === "pdf" ? "" : "max-w-7xl mx-auto"}`}>
           {/* TAB DASHBOARD */}
           {activeTab === "dashboard" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4">
@@ -211,15 +212,7 @@ export default function AdminDashboard() {
           )}
           {activeTab === "settings" && <SettingPage />}
 
-          {/* TAB LAINNYA (Coming Soon) */}
-          {activeTab === "pdf" && (
-            <div className="card text-center p-20 opacity-50 border-dashed border-2">
-              <p className="text-slate-400">
-                Fitur {menus.find((m) => m.id === activeTab)?.name} sedang
-                dikembangkan...
-              </p>
-            </div>
-          )}
+          {activeTab === "pdf" && <PdfSettingPage />}
         </div>
       </main>
     </div>
