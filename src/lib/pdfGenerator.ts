@@ -138,8 +138,9 @@ export const generateSKL = (data: any) => {
 
     // Teks Tanggal & Jabatan (Masih mengikuti flow teks jika tidak ada setting khusus)
     // Tapi kita bisa buat ini juga mengikuti sigX jika mau lebih rapi
-    doc.text(`${tglSurat}`, sigX, sigY - 12);
-    doc.text(`Kepala SMA Negeri 1 Margaasih,`, sigX, sigY - 5);
+    const kota = set?.kota_surat || "Bandung";
+    doc.text(`${kota}, ${tglSurat}`, sigX, sigY - 12);
+    doc.text(`Kepala ${set?.nama_sekolah || "SMA Negeri 1 Margaasih"},`, sigX, sigY - 5);
 
     // Tambahkan TTD & Cap
     if (set?.show_tte === true) {

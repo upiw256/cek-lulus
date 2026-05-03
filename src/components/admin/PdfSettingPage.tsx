@@ -168,7 +168,27 @@ export default function PdfSettingPage() {
              </div>
           </div>
 
-          <div className="space-y-4 pt-2">
+          <div className="space-y-4 pt-2 border-t border-slate-100">
+             <h3 className="font-bold text-slate-700 text-sm border-b pb-2 uppercase tracking-wider">Profil Sekolah & Surat</h3>
+             <div className="space-y-4">
+                  <div className="space-y-1">
+                     <label className="text-[10px] font-bold text-slate-400 uppercase">Nama Sekolah (Di TTD)</label>
+                     <input type="text" value={settings.nama_sekolah} onChange={(e) => setSettings({...settings, nama_sekolah: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase">Kota Surat</label>
+                        <input type="text" value={settings.kota_surat} onChange={(e) => setSettings({...settings, kota_surat: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase">Tgl Surat</label>
+                        <input type="text" value={settings.tgl_surat} onChange={(e) => setSettings({...settings, tgl_surat: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold" />
+                      </div>
+                  </div>
+             </div>
+          </div>
+
+          <div className="space-y-4 pt-2 border-t border-slate-100">
              <h3 className="font-bold text-slate-700 text-sm border-b pb-2 uppercase tracking-wider">Tanda Tangan & Cap</h3>
              <div className="grid grid-cols-2 gap-4">
                  <div className="space-y-1">
@@ -284,8 +304,13 @@ export default function PdfSettingPage() {
              <img src={`/tte/stamp.png?t=${Date.now()}`} className="w-full h-full object-contain pointer-events-none" />
           </ElementBox>
 
-          {/* NAMA KEPSEK (Sync with Draggable Sig) */}
-          <div className="absolute transition-all duration-300" style={{ left: settings.sig_x * SCALE, top: (settings.sig_y + settings.sig_height) * SCALE + 2 }}>
+          {/* NAMA KEPSEK & DETAILS (Sync with Draggable Sig) */}
+          <div className="absolute transition-all duration-300 pointer-events-none" style={{ left: settings.sig_x * SCALE, top: settings.sig_y * SCALE - 15 * SCALE }}>
+              <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="mb-2">{settings.kota_surat}, {settings.tgl_surat}</div>
+              <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="mb-2">Kepala {settings.nama_sekolah || "SMA Negeri 1 Margaasih"},</div>
+          </div>
+
+          <div className="absolute transition-all duration-300 pointer-events-none" style={{ left: settings.sig_x * SCALE, top: (settings.sig_y + settings.sig_height) * SCALE + 2 }}>
               <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="font-bold line-clamp-1">{settings.nama_kepsek.toUpperCase()}</div>
               <div style={{ fontSize: 11 * 0.3528 * SCALE }} className="line-clamp-1">NIP. {settings.nip_kepsek}</div>
           </div>
