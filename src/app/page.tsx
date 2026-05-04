@@ -134,10 +134,10 @@ export default function HalamanCekKelulusan() {
       {showModal && hasilSiswa && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
           <div className="bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl">
-            <div className={`p-8 text-center text-white ${hasilSiswa.status_lulus ? 'bg-green-500' : 'bg-orange-500'}`}>
+            <div className={`p-8 text-center text-white ${hasilSiswa.status_lulus ? 'bg-green-500' : 'bg-red-500'}`}>
               <div className="text-5xl mb-2">{hasilSiswa.status_lulus ? "🎉" : "📋"}</div>
               <h2 className="text-2xl font-black uppercase tracking-widest">
-                {hasilSiswa.status_lulus ? "Kamu Lulus!" : "Hasil Pengumuman"}
+                {hasilSiswa.status_lulus ? "Kamu Lulus!" : "Kelulusan Kamu Ditunda"}
               </h2>
             </div>
             <div className="p-8 space-y-6">
