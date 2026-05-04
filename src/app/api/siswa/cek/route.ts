@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Siswa, Setting } from "@/models/model";
+import { normalizeDateIndo } from "@/lib/dateUtils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,10 +29,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Cari Siswa berdasarkan NISN dan Tanggal Lahir
+    // 4. Cari Siswa berdasarkan NISN dan Tanggal Lahir (Normalisasi Dulu!)
     const dataSiswa = await Siswa.findOne({
       nisn: nisn,
-      tgl_lahir: tgl_lahir
+      tgl_lahir: normalizeDateIndo(tgl_lahir)
     });
 
     if (!dataSiswa) {

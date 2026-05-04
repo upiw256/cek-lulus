@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import confetti from "canvas-confetti";
 import { generateSKL } from '@/lib/pdfGenerator';
+import { normalizeDateIndo } from "@/lib/dateUtils";
 
 export default function HalamanCekKelulusan() {
   const [nisn, setNisn] = useState("");
@@ -24,11 +25,9 @@ export default function HalamanCekKelulusan() {
 
   useEffect(() => { refreshCaptcha(); }, []);
 
-  // FUNGSI KONVERSI TANGGAL: YYYY-MM-DD -> DD/MM/YYYY
+  // FUNGSI KONVERSI TANGGAL: Mendukung berbagai format dari HP/Browser
   const formatTanggalKeIndo = (dateStr: string) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
+    return normalizeDateIndo(dateStr);
   };
 
   const handleCek = async (e: React.FormEvent) => {
@@ -69,8 +68,25 @@ export default function HalamanCekKelulusan() {
     }
   };
 
-  const downloadPDF = (data: any) => {
-    generateSKL(data);
+  const downloadPDF = async (data: any) => {
+    const cleanNama = data.nama.split(" ")[0].replace(/[^a-z0-9]/gi, "_").toUpperCase();
+    const fileName = `SKL_${data.nisn}_${cleanNama}.pdf`;
+    const fileUrl = `/generate/${fileName}`;
+
+    try {
+      // Cek apakah file sudah di-generate oleh admin
+      const checkRes = await fetch(fileUrl, { method: "HEAD" });
+      if (checkRes.ok) {
+        // Jika file ada, langsung buka/download
+        window.open(fileUrl, "_blank");
+      } else {
+        // Jika tidak ada, fallback ke generate client-side
+        generateSKL(data);
+      }
+    } catch (err) {
+      // Jika terjadi error (misalnya CORS atau network), fallback ke client-side
+      generateSKL(data);
+    }
   };
 
   return (

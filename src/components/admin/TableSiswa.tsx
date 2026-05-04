@@ -1,5 +1,5 @@
-"use client";
 import { useState } from "react";
+import { generateSKLBase64 } from "@/lib/pdfGenerator";
 
 interface SiswaProps {
   data: any[];
@@ -30,6 +30,54 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
   // State untuk Hapus
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
+
+  // State untuk Generate PDF Massal
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState({ current: 0, total: 0 });
+
+  const handleGenerateAllPDF = async () => {
+    if (!confirm(`Apakah Anda yakin ingin menggenerate PDF untuk ${data.length} siswa? Proses ini mungkin memakan waktu.`)) return;
+    
+    setIsGenerating(true);
+    setGenerationProgress({ current: 0, total: data.length });
+
+    try {
+      // 1. Ambil Setting Terbaru
+      const settingRes = await fetch("/api/admin/setting");
+      const pengaturan = await settingRes.json();
+
+      // 2. Loop dan Generate
+      for (let i = 0; i < data.length; i++) {
+        const student = data[i];
+        setGenerationProgress({ current: i + 1, total: data.length });
+
+        try {
+          const pdfBase64 = await generateSKLBase64({
+            ...student,
+            pengaturan
+          });
+
+          await fetch("/api/admin/generate/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nisn: student.nisn,
+              nama: student.nama,
+              pdfBase64
+            })
+          });
+        } catch (err) {
+          console.error(`Gagal generate PDF untuk ${student.nama}:`, err);
+        }
+      }
+
+      alert("✅ Berhasil: Semua PDF telah di-generate dan disimpan di server!");
+    } catch (err) {
+      alert("❌ Terjadi kesalahan saat generate massal");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // FUNGSI: Hapus Data
   const handleDelete = async (id: string) => {
@@ -147,12 +195,27 @@ export default function TableSiswa({ data, onRefresh }: SiswaProps) {
             </span>{" "}
             Siswa
           </p>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-3 px-5 py-3 bg-slate-900 text-white rounded-2xl font-bold shadow-lg hover:bg-slate-800 active:scale-95 transition-all text-sm"
             >
               ➕ Tambah Siswa Baru
+            </button>
+            <button
+              disabled={isGenerating || data.length === 0}
+              onClick={handleGenerateAllPDF}
+              className={`mt-3 px-5 py-3 rounded-2xl font-bold shadow-lg active:scale-95 transition-all text-sm flex items-center gap-2 ${
+                isGenerating 
+                ? "bg-blue-100 text-blue-600 cursor-not-allowed" 
+                : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              {isGenerating ? (
+                <>⏳ {generationProgress.current} / {generationProgress.total}</>
+              ) : (
+                <>📄 Generate Semua PDF</>
+              )}
             </button>
             <button
               onClick={() => setShowDeleteAllModal(true)}

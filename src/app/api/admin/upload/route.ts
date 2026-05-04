@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import {Siswa} from "@/models/model";
 import ExcelJS from "exceljs";
+import { normalizeDateIndo } from "@/lib/dateUtils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,7 +33,8 @@ export async function POST(req: NextRequest) {
         tgl_lahir_convert = `${day}/${month}/${year}`;
       } else {
         // Jika Excel membacanya sebagai tulisan biasa (String)
-        tgl_lahir_convert = cellTgl.text?.trim() || "";
+        const rawText = cellTgl.text?.trim() || "";
+        tgl_lahir_convert = normalizeDateIndo(rawText);
       }
       if (rowNumber > 1) {
         // Ambil nilai dan bersihkan spasi (trim)
